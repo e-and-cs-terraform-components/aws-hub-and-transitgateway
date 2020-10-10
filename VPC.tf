@@ -19,7 +19,7 @@ variable "IAM_Role_VPC_Flow_Logs_ARN" {
 variable "VPC_CIDR" {
   type        = string
   default     = "192.0.2.0/24"
-  description = "The CIDR for the VPC which must be large enough to support 8 subnets."
+  description = "The CIDR for the VPC which must be large enough to support 4 subnets."
   validation {
     condition     = can(regex("^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])\\/(1[6-9]|2[0-8])$", var.VPC_CIDR))
     error_message = "Must be a valid IPv4 CIDR with a CIDR Mask between 16 and 28 bits (/16-/28)."
@@ -44,14 +44,14 @@ resource "aws_vpc" "vpc" {
   }
 }
 # VPC Flow Logs
-resource "aws_cloudwatch_log_group" "IAM_VPC_Flow_Logs" {
-  count = var.Enable_VPC_Flow_Logs ? 1 : 0
+resource "aws_cloudwatch_log_group" "VPC_Flow_Logs" {
+  count = var.Enable_VPC_Flow_Logs && var.IAM_Role_VPC_Flow_Logs_ARN != null ? 1 : 0
   name  = "Flow_Logs-${aws_vpc.vpc.tags.Name}"
 }
-resource "aws_flow_log" "IAM_VPC_Flow_Logs" {
+resource "aws_flow_log" "VPC_Flow_Logs" {
   count           = var.Enable_VPC_Flow_Logs && var.IAM_Role_VPC_Flow_Logs_ARN != null ? 1 : 0
   iam_role_arn    = var.IAM_Role_VPC_Flow_Logs_ARN
-  log_destination = aws_cloudwatch_log_group.IAM_VPC_Flow_Logs[0].arn
+  log_destination = aws_cloudwatch_log_group.VPC_Flow_Logs[0].arn
   traffic_type    = "ALL"
   vpc_id          = aws_vpc.vpc.id
 }
