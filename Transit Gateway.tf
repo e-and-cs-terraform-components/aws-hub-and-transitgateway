@@ -81,9 +81,3 @@ output "aws_ec2_transit_gateway_route_table_spokes_to_hub" {
 output "aws_ec2_transit_gateway_route_table_spokes_to_hub_id" {
   value = aws_ec2_transit_gateway_route_table.spokes_to_hub.id
 }
-output "aws_ec2_transit_gateway_route_spokes_default" {
-  value = aws_ec2_transit_gateway_route.spokes_default
-}
-output "aws_ec2_transit_gateway_route_spokes_default_id" {
-  value = aws_ec2_transit_gateway_route.spokes_default.id
-}
