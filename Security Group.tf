@@ -29,6 +29,7 @@ resource "aws_security_group_rule" "egress_any" {
   description       = "Anything to Anywhere"
 }
 
+## Outputs
 output "aws_security_group_allow_all" {
   value = aws_security_group.allow_all
 }
