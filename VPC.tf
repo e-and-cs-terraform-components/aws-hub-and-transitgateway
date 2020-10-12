@@ -45,11 +45,11 @@ resource "aws_vpc" "vpc" {
 }
 # VPC Flow Logs
 resource "aws_cloudwatch_log_group" "VPC_Flow_Logs" {
-  count = var.Enable_VPC_Flow_Logs && var.IAM_Role_VPC_Flow_Logs_ARN != null ? 1 : 0
+  count = var.Enable_VPC_Flow_Logs ? 1 : 0
   name  = "Flow_Logs-${aws_vpc.vpc.tags.Name}"
 }
 resource "aws_flow_log" "VPC_Flow_Logs" {
-  count           = var.Enable_VPC_Flow_Logs && var.IAM_Role_VPC_Flow_Logs_ARN != null ? 1 : 0
+  count           = var.Enable_VPC_Flow_Logs ? 1 : 0
   iam_role_arn    = var.IAM_Role_VPC_Flow_Logs_ARN
   log_destination = aws_cloudwatch_log_group.VPC_Flow_Logs[0].arn
   traffic_type    = "ALL"
