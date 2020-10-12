@@ -122,7 +122,7 @@ resource "aws_route_table" "int_transit" {
 }
 
 resource "aws_route" "int_transit_default" {
-  count                  = var.South_North_Gateway_ENI != "" ? 1 : 0
+  count                  = var.South_North_Gateway_ENI != null && var.South_North_Gateway_ENI != "" ? 1 : 0
   route_table_id         = aws_route_table.int_transit.id
   destination_cidr_block = "0.0.0.0/0"
   network_interface_id   = var.South_North_Gateway_ENI # Usually FGT AZ1 ID
